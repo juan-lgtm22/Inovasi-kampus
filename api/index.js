@@ -3,7 +3,9 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 require('dotenv').config();
 
-const Mahasiswa = require('models/Mahasiswa.js');
+// PERBAIKAN: Menggunakan relative path '../models/mahasiswa' 
+// karena index.js berada di dalam folder 'api' dan nama file model adalah 'mahasiswa.js'
+const Mahasiswa = require('../models/mahasiswa');
 
 const app = express();
 
@@ -45,6 +47,9 @@ app.get('/api/mahasiswa', async (req, res) => {
 app.put('/api/mahasiswa/:id', async (req, res) => {
   try {
     const data = await Mahasiswa.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    if (!data) {
+      return res.status(404).json({ error: 'Data mahasiswa tidak ditemukan' });
+    }
     res.json(data);
   } catch (err) {
     res.status(400).json({ error: err.message });
@@ -54,7 +59,10 @@ app.put('/api/mahasiswa/:id', async (req, res) => {
 // 4. DELETE (Hapus Mahasiswa berdasarkan ID)
 app.delete('/api/mahasiswa/:id', async (req, res) => {
   try {
-    await Mahasiswa.findByIdAndDelete(req.params.id);
+    const data = await Mahasiswa.findByIdAndDelete(req.params.id);
+    if (!data) {
+      return res.status(404).json({ error: 'Data mahasiswa tidak ditemukan' });
+    }
     res.json({ message: 'Data mahasiswa berhasil dihapus' });
   } catch (err) {
     res.status(500).json({ error: err.message });
