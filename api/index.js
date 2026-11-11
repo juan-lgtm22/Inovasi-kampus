@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 require('dotenv').config();
 
-const Mahasiswa = require('../models/mahasiswa.js');
+const Mahasiswa = require('models/Mahasiswa.js');
 
 const app = express();
 
